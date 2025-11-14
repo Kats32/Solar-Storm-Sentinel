@@ -18,31 +18,31 @@ The pipeline uses:
 2. Features Used
 
 The ASPEX instrument variables used as input features for training are the following:
--trig_counts
--coin_trig_counts
--peak_det_counts
--rej_counts
--fpga_temp_mon
--ESA1_HV_set
--ESA2_HV_set
--spacecraft_xvel
+- trig_counts
+- coin_trig_counts
+- peak_det_counts
+- rej_counts
+- fpga_temp_mon
+- ESA1_HV_set
+- ESA2_HV_set
+- spacecraft_xvel
 
 The eight features were selected as they show clear variations during disturbances and are available across files.
 
 3. Data Preprocessing
 
--The preprocessing pipeline does the following:
--Load multiple ASPEX CDF files.
--Extract the required features.
--Remove fill values (any value equal to -1.0e31).
--Trim all features to the same length to align them.
--Normalize them using MinMaxScaler in the range from 0 to 1.
--Create sliding input sequences of length 50 time steps.
--The target for forecasting is the next time step for one selected feature like trig_counts.
+- The preprocessing pipeline does the following:
+- Load multiple ASPEX CDF files.
+- Extract the required features.
+- Remove fill values (any value equal to -1.0e31).
+- Trim all features to the same length to align them.
+- Normalize them using MinMaxScaler in the range from 0 to 1.
+- Create sliding input sequences of length 50 time steps.
+- The target for forecasting is the next time step for one selected feature like trig_counts.
 
 After processing, the final shapes are:
--Input (X): number_of_sequences, 50 time steps, 8 features
--Output (y): number_of_sequences
+- Input (X): number_of_sequences, 50 time steps, 8 features
+- Output (y): number_of_sequences
 
 4. Model Description
 
@@ -59,28 +59,28 @@ The model learns the normal temporal pattern of ASPEX data. Once trained, its pr
 
 Because CME event labels are not available in the dataset, the detection of CMEs relies on threshold-based rules. Typical thresholds are computed using percentiles. 
 For example:
--trig_counts over the 90th percentile
--coin_trig_counts above the 90th percentile
--fpga_temp_mon above the 85th percentile
+- trig_counts over the 90th percentile
+- coin_trig_counts above the 90th percentile
+- fpga_temp_mon above the 85th percentile
 
 If any of these conditions are met, the sample is marked as a potential CME disturbance. The labels are smoothed using a rolling window so that small spikes do not trigger false detections. After smoothing, the flagged time intervals correspond to possible CME event windows.
 
 6. Overview of Workflow
 
--Load ASPEX CDF files.
--Extract the required features.
--Clean and trim feature arrays.
--Normalize using MinMaxScaler.
--Generate 50-step input sequences for LSTM.
--Train the LSTM model to predict the next value.
--Employ thresholds to detect CME-like anomalies.
--Visualize predicted vs actual values and anomaly windows.
+- Load ASPEX CDF files.
+- Extract the required features.
+- Clean and trim feature arrays.
+- Normalize using MinMaxScaler.
+- Generate 50-step input sequences for LSTM.
+- Train the LSTM model to predict the next value.
+- Employ thresholds to detect CME-like anomalies.
+- Visualize predicted vs actual values and anomaly windows.
 
 7. Output Provided
 
 The project produces:
--The scaled multivariate training data
--LSTM model training results
--Predictions for each feature 
--Threshold-based anomaly or CME detection results 
--Plots of anomaly intervals and model forecasts 
+- The scaled multivariate training data
+- LSTM model training results
+- Predictions for each feature 
+- Threshold-based anomaly or CME detection results 
+- Plots of anomaly intervals and model forecasts 

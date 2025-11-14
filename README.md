@@ -15,6 +15,7 @@ The pipeline uses:
 - Training an LSTM forecasting model
 - Threshold-based anomaly detection
 
+
 2. Features Used
 
 The ASPEX instrument variables used as input features for training are the following:
@@ -28,6 +29,7 @@ The ASPEX instrument variables used as input features for training are the follo
 - spacecraft_xvel
 
 The eight features were selected as they show clear variations during disturbances and are available across files.
+
 
 3. Data Preprocessing
 
@@ -44,6 +46,7 @@ After processing, the final shapes are:
 - Input (X): number_of_sequences, 50 time steps, 8 features
 - Output (y): number_of_sequences
 
+
 4. Model Description
 
 The forecasting model is a neural network composed of LSTM layers.
@@ -55,6 +58,7 @@ Output:
 A single value that represents the next time step of the main forecasting feature. For example, the next trig_counts value.
 The model learns the normal temporal pattern of ASPEX data. Once trained, its predictions help identify periods where the observed values strongly deviate from expected behavior.
 
+
 5. CME Detection
 
 Because CME event labels are not available in the dataset, the detection of CMEs relies on threshold-based rules. Typical thresholds are computed using percentiles. 
@@ -64,6 +68,7 @@ For example:
 - fpga_temp_mon above the 85th percentile
 
 If any of these conditions are met, the sample is marked as a potential CME disturbance. The labels are smoothed using a rolling window so that small spikes do not trigger false detections. After smoothing, the flagged time intervals correspond to possible CME event windows.
+
 
 6. Overview of Workflow
 
@@ -75,6 +80,7 @@ If any of these conditions are met, the sample is marked as a potential CME dist
 - Train the LSTM model to predict the next value.
 - Employ thresholds to detect CME-like anomalies.
 - Visualize predicted vs actual values and anomaly windows.
+
 
 7. Output Provided
 
